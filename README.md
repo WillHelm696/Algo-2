@@ -1,4 +1,5 @@
 # ALGORITMOS Y ESTRUCTURAS DE DATOS II  <img src="algorithms2-logo-slack.png" align="right" alt="" width="150" />
+Repositorio de william
 
 Vamos a utilizar este repositorio como medio de contacto.
 
