@@ -1,4 +1,6 @@
 from Ejercicio1 import *
+from Ejercicio2 import *
+from Ejercicio3 import *
 
 class AVLTree:
      root = None
@@ -144,15 +146,26 @@ def Actualizar(Current,element,key):
 '------------------------------------------------------------'
 def balance_factor(avlnode):
 	while avlnode != None:		
-		if avlnode.leftnode == avlnode.rightnode :
-			avlnode.bf = 0
-		elif avlnode.leftnode.bf != None and avlnode.rightnode.bf == None: 
-			avlnode.bf = avlnode.leftnode.bf+1 - 0 
-		elif avlnode.leftnode.bf == None and avlnode.rightnode.bf != None: 
-			avlnode.bf = 0 -( avlnode.leftnode.bf+1) 
-		elif avlnode.bf>1 :
-			rotateLeft(avlnode)
-		else avlnode.bf<1
-		
+		if avlnode !=None:
+			balance_factor(avlnode.leftnode)
+			balance_factor(avlnode.rightnode)
 
-		avlnode = avlnode.parent
+			if avlnode.leftnode == avlnode.rightnode :
+				avlnode.bf = 0
+			elif avlnode.leftnode.bf != None and avlnode.rightnode.bf == None: 
+				avlnode.bf = avlnode.leftnode.bf+1
+			elif avlnode.leftnode.bf == None and avlnode.rightnode.bf != None: 
+				avlnode.bf = avlnode.leftnode.bf+1 
+			elif avlnode.bf>1 :
+				rotateLeft(avlnode)
+			else avlnode.bf<1
+				rotateRight(avlnode)
+
+			elif avlnode.bf > 1:
+				newRoot = rotateRight(avlnode)
+				balance_factor(newRoot)
+			elif avlnode.bf < -1:
+				newRoot = rotateLeft(avlnode)
+				balance_factor(newRoot)
+		return avlnode
+
