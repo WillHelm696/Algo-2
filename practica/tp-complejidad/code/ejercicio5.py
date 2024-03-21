@@ -19,4 +19,3 @@ n=9
 print("Lista: ",A)
 print("¿La lista A contiene un par de elementos que suman",n,"? ", contiene_suma(A,n) )
 #la compejiad del algoritmo seria O(n) ya que solo recoremos la lista una vez y realiza las operaciones en tiempo constante en cada iteracion.
-

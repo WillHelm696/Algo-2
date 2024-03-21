@@ -9,6 +9,8 @@ class AVLNode:
     rightnode = None
     key = None
     value = None
+	height = None
+	count = None
     bf = None
 '------------------------------------------------------------'
 def search(B,element):
@@ -53,32 +55,43 @@ def Actualizar(Current,element,key):
 			return Actualizar(Current.rightnode,element,key)
 	return None
 #////////////////////////////////////////////////////////////////////////
-def rotate_left(root):
-    if root is None or root.right is None:
-        return root
 
-    new_root = root.right
-    root.right = new_root.left
-    new_root.left = root
+def rotateLeft(node):
+    new_root = node.rightnode
+    node.rightnode = new_root.leftnode
+    if new_root.leftnode:
+        new_root.leftnode.parent = node
+    new_root.parent = node.parent
+    if not node.parent:
+        root = new_root
+    elif node == node.parent.leftnode:
+        node.parent.leftnode = new_root
+    else:
+        node.parent.rightnode = new_root
+    new_root.leftnode = node
+    node.parent = new_root
+    node.height = max(node.leftnode.height,node.rightnode.height) + 1
+    new_root.height = max(new_root.leftnode.height,new_root.rightnode.height) + 1
     return new_root
 
-def rotateLeft(Tree, avlnode):
-    newRoot = avlnode.rightnode
-    avlnode.rightnode = newRoot.leftnode
-    if newRoot.leftnode:
-        newRoot.leftnode.parent = avlnode
-
-    newRoot.parent = avlnode.parent
-    if avlnode.parent is None:
-        Tree.root = newRoot
-    elif avlnode.parent.leftnode == avlnode:
-        avlnode.parent.leftnode = newRoot
+def rotateRight(node):
+    new_root = node.leftnode
+    node.leftnode = new_root.rightnode
+    if new_root.rightnode:
+        new_root.rightnode.parent = node
+    new_root.parent = node.parent
+    if not node.parent:
+        root = new_root
+    elif node == node.parent.rightnode:
+        node.parent.rightnode = new_root
     else:
-        avlnode.parent.rightnode = newRoot
+        node.parent.leftnode = new_root
+    new_root.rightnode = node
+    node.parent = new_root
+    node.height = max(node.leftnode.height,node.rightnode.height) + 1
+    new_root.height = max(new_root.leftnode.height,new_root.rightnode.height) + 1
+    return new_root
 
-    newRoot.leftnode = avlnode
-    avlnode.parent = newRoot
-    return newRoot
 """"
 def rotateLeft(Tree,avlnode):
 	newRoot=avlnode.rightnode
@@ -108,7 +121,7 @@ def rotateLeft(Tree,avlnode):
 	newRoot.leftnode = avlnode
 	newRoot.leftnode.parent=newRoot##
 	return newRoot
-"""
+
 def rotateRight(Tree,avlnode):
 	newRoot=avlnode.leftnode
 	
@@ -136,6 +149,7 @@ def rotateRight(Tree,avlnode):
 	newRoot.rightnode = avlnode
 	newRoot.rightnode.parent=newRoot##
 	return newRoot
+"""
 #////////////////////////////////////////////////////////////////////////
 def calculateBalance(AVLTree): 
     if AVLTree.root!=None:
@@ -193,10 +207,10 @@ def Add_Node(Current,avlnode):
 	if Current.leftnode==None or Current.rightnode==None:
 		if avlnode.key<Current.key and Current.leftnode==None:
 			Current.leftnode=avlnode
-			balance_factor(Current.leftnode)
+			update_bf(Current.leftnode)
 		elif Current.key<avlnode.key and Current.rightnode==None:
 			Current.rightnode=avlnode	
-			balance_factor(Current.rightnode)
+			update_bf(Current.rightnode)
 	elif Current.leftnode!=None or Current.rightnode!=None:		
 		if Current.leftnode!=None:
 			if avlnode.key<Current.key:
@@ -204,23 +218,23 @@ def Add_Node(Current,avlnode):
 		if Current.rightnode!=None:
 			if Current.key<avlnode.key:
 				return Add_Node(Current.rightnode,avlnode)
+	avlnode.height = 1 + max(avlnode.leftnode.height,avlnode.righntnode.height)
 	avlnode.parent=Current
 	return avlnode.key
 
-def balance_factor(avlnode):
+def update_bf(avlnode):
 	if avlnode !=None:
 		if avlnode.leftnode == avlnode.rightnode:
 			avlnode.bf = 0
 		else:
 			avlnode.bf = haltura(avlnode.leftnode) - haltura(avlnode.rightnode)
-
 		if avlnode.bf > 1 :
 			newRoot = rotateRight(avlnode)
 			recalculate_fb(newRoot)
 		elif avlnode.bf < -1:
 			newRoot = rotateLeft(avlnode)
 			recalculate_fb(newRoot)
-		return balance_factor(avlnode.parent)
+		return update_bf(avlnode.parent)
 #////////////////////////////////////////////////////////////////////////
 def delete(B,element):
 	key=search(B,element)
