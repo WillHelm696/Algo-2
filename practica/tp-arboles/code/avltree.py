@@ -4,14 +4,14 @@ class AVLTree:
      root = None
 
 class AVLNode:
-    parent = None
-    leftnode = None
-    rightnode = None
-    key = None
-    value = None
-	height = None
+	parent = None
+	leftnode = None
+	rightnode = None
+	key = None
+	value = None
 	count = None
-    bf = None
+	height = None
+	bf = None
 '------------------------------------------------------------'
 def search(B,element):
 	if B.root!=None:
@@ -54,102 +54,58 @@ def Actualizar(Current,element,key):
 		elif Current.key<key:
 			return Actualizar(Current.rightnode,element,key)
 	return None
-#////////////////////////////////////////////////////////////////////////
+'------------------------------------------------------------'
+def haltura(avlnode):
+    if avlnode is not None:
+        left_height = haltura(avlnode.leftnode)
+        right_height = haltura(avlnode.rightnode)
+        # La altura del árbol es la altura máxima de sus subárboles más 1
+        return max(left_height, right_height) + 1
+    return 0
 
-def rotateLeft(node):
-    new_root = node.rightnode
-    node.rightnode = new_root.leftnode
+def height(avlnode):
+	if avlnode !=None:
+		if avlnode.bf > 0:
+			height(avlnode.leftnode)
+		else :
+			height(avlnode.rightnode)
+		return avlnode.height
+#////////////////////////////////////////////////////////////////////////
+def rotateLeft(Tree,avlnode):
+    new_root = avlnode.rightnode
+    avlnode.right = new_root.leftnode
     if new_root.leftnode:
         new_root.leftnode.parent = node
-    new_root.parent = node.parent
-    if not node.parent:
+    new_root.parent = avlnode.parent
+    if not avlnode.parent:
         root = new_root
-    elif node == node.parent.leftnode:
-        node.parent.leftnode = new_root
+    elif avlnode == avlnode.parent.leftnode:
+        avlnode.parent.leftnode = new_root
     else:
-        node.parent.rightnode = new_root
-    new_root.leftnode = node
-    node.parent = new_root
-    node.height = max(node.leftnode.height,node.rightnode.height) + 1
-    new_root.height = max(new_root.leftnode.height,new_root.rightnode.height) + 1
+        avlnode.parent.rightnode = new_root
+    new_root.leftnode = avlnode
+    avlnode.parent = new_root
+    #node.height = max(height(node.leftnode), height(node.rightnode)) + 1
+    #new_root.height = max(height(new_root.leftnode), height(new_root.rightnode)) + 1
     return new_root
-
-def rotateRight(node):
-    new_root = node.leftnode
-    node.leftnode = new_root.rightnode
-    if new_root.rightnode:
-        new_root.rightnode.parent = node
-    new_root.parent = node.parent
-    if not node.parent:
-        root = new_root
-    elif node == node.parent.rightnode:
-        node.parent.rightnode = new_root
-    else:
-        node.parent.leftnode = new_root
-    new_root.rightnode = node
-    node.parent = new_root
-    node.height = max(node.leftnode.height,node.rightnode.height) + 1
-    new_root.height = max(new_root.leftnode.height,new_root.rightnode.height) + 1
-    return new_root
-
-""""
-def rotateLeft(Tree,avlnode):
-	newRoot=avlnode.rightnode
-	
-	if avlnode.leftnode is None:
-		if newRoot.leftnode != None:
-			avlnode.rightnode = newRoot.leftnode
-			#avlnode.rightnode.parent=avlnode
-			newRoot.leftnode.rightnode = newRoot
-			#newRoot.leftnode.righntnode.parent = newRoot.leftnode
-
-			newRoot=avlnode.rightnode
-		newRoot.leftnode=avlnode
-		avlnode.rightnode=None
-	else:
-		avlnode.rightnode=newRoot.leftnode
-		avlnode.rightnode.parent=avlnode
-
-	if avlnode.parent == None:
-		Tree.root=newRoot
-	elif avlnode.parent.leftnode == avlnode:
-		avlnode.parent.leftnode=newRoot
-	else: 
-		avlnode.parent.rightnode=newRoot
-
-	newRoot.parent=avlnode.parent
-	newRoot.leftnode = avlnode
-	newRoot.leftnode.parent=newRoot##
-	return newRoot
-
+        
 def rotateRight(Tree,avlnode):
-	newRoot=avlnode.leftnode
-	
-	if avlnode.rightnode is None:
-		if avlnode.leftnode.rightnode is not None:
-			avlnode.leftnode = newRoot.rightnode
-			newRoot.parent=newRoot.rightnode
-			newRoot.rightnode.parent=avlnode
-			avlnode.leftnode.leftnode=newRoot
-			newRoot=avlnode.leftnode
-		newRoot.rightnode=avlnode
-		avlnode.leftnode=None
-	else:
-		avlnode.leftnode=newRoot.rightnode
-		avlnode.leftnode.parent=avlnode
-
-	if avlnode.parent == None:
-		Tree.root=newRoot
-	elif avlnode.parent.leftnode == avlnode:
-		avlnode.parent.leftnode=newRoot
-	else: 
-		avlnode.parent.rightnode=newRoot
-
-	newRoot.parent=avlnode.parent
-	newRoot.rightnode = avlnode
-	newRoot.rightnode.parent=newRoot##
-	return newRoot
-"""
+    new_root = avlnode.leftnode
+    avlnode.leftnode = new_root.rightnode
+    if new_root.rightnode:
+        new_root.rightnode.parent = avlnode
+    new_root.parent = avlnode.parent
+    if not avlnode.parent:
+        root = new_root
+    elif avlnode == avlnode.parent.rightnode:
+        avlnode.parent.rightnode = new_root
+    else:
+        avlnode.parent.leftnode = new_root
+    new_root.rightnode = avlnode
+    avlnode.parent = new_root
+    #node.height = max(height(node.leftnode),height(node.rightnode)) + 1
+    #new_root.height = max(height(new_root.left),height(new_root.rightnode)) + 1
+    return new_root
 #////////////////////////////////////////////////////////////////////////
 def calculateBalance(AVLTree): 
     if AVLTree.root!=None:
@@ -163,14 +119,6 @@ def calculate_bf(avlnode):
         avlnode.bf = haltura(avlnode.leftnode) - haltura(avlnode.rightnode)
         calculate_bf(avlnode.leftnode)
         calculate_bf(avlnode.rightnode)
-
-def haltura(root):
-    if root is not None:
-        left_height = haltura(root.leftnode)
-        right_height = haltura(root.rightnode)
-        # La altura del árbol es la altura máxima de sus subárboles más 1
-        return max(left_height, right_height) + 1
-    return 0
 #////////////////////////////////////////////////////////////////////////
 def reBalance(AVLTree):
     if AVLTree.root!=None:
@@ -181,60 +129,77 @@ def recalculate_fb(avlnode):
 	if avlnode !=None:
 		recalculate_fb(avlnode.leftnode)
 		recalculate_fb(avlnode.rightnode)
-		if avlnode.leftnode == avlnode.rightnode :
-			avlnode.bf = 0
-		else:
-			avlnode.bf = haltura(avlnode.leftnode) - haltura(avlnode.rightnode)
-
+	if avlnode.leftnode == avlnode.rightnode :
+		avlnode.bf = 0
+	else:
+		#avlnode.bf = height(avlnode.leftnode) - height(avlnode.rightnode)
+		avlnode.bf = haltura(avlnode.leftnode) - haltura(avlnode.rightnode)
 		if avlnode.bf > 1 :
-			newRoot = rotateRight(avlnode)
+			if avlnode.rightnode==None:
+				if avlnode.leftnode.bf<0:
+					rotateRight(avlnode.leftnode)			
+			new_root = rotateRight(avlnode)
+			recalculate_fb(new_root)
 		elif avlnode.bf < -1 :
-			newRoot = rotateLeft(avlnode)
-		recalculate_fb(newRoot)
-	return newRoot
+			if avlnode.leftnode==None:
+				if avlnode.rightnode.bf>0:
+					rotateRight(avlnode.rightnode)
+			new_root = rotateLeft(avlnode)
+			recalculate_fb(new_root)
 #////////////////////////////////////////////////////////////////////////
 def insert(B,element,key):
 	avlnode=AVLNode()
 	avlnode.key=key
 	avlnode.value=element
 	avlnode.bf=0
+	avlnode.height = 0
+	avlnode.count=0
 	if B.root==None:
 			B.root=avlnode
 			return key
-	return Add_Node(B.root,avlnode)
+	Node = Add_Node(B.root,avlnode)
+	return Node.key
 
 def Add_Node(Current,avlnode):
-	if Current.leftnode==None or Current.rightnode==None:
-		if avlnode.key<Current.key and Current.leftnode==None:
+	if Current.key > avlnode.key:
+		if Current.leftnode==None:
 			Current.leftnode=avlnode
-			update_bf(Current.leftnode)
-		elif Current.key<avlnode.key and Current.rightnode==None:
-			Current.rightnode=avlnode	
-			update_bf(Current.rightnode)
-	elif Current.leftnode!=None or Current.rightnode!=None:		
-		if Current.leftnode!=None:
-			if avlnode.key<Current.key:
-				return Add_Node(Current.leftnode,avlnode)
-		if Current.rightnode!=None:
-			if Current.key<avlnode.key:
-				return Add_Node(Current.rightnode,avlnode)
-	avlnode.height = 1 + max(avlnode.leftnode.height,avlnode.righntnode.height)
+			avlnode.parent=Current
+			update_bf(avlnode)
+		else:
+			Current.count +=1
+			Node = Add_Node(Current.leftnode,avlnode)
+			#Current.height = max(Current.leftnode.height,Current.rightnode.height)+1
+			return Node
+	elif Current.key<avlnode.key :
+		if Current.rightnode==None:
+			Current.rightnode=avlnode
+			avlnode.parent=Current
+			update_bf(avlnode)
+		else:
+			Current.count +=1
+			Node = Add_Node(Current.rightnode,avlnode)
+			#Current.height = max(Current.leftnode.height,Current.rightnode.height)+1
+			return Node
 	avlnode.parent=Current
-	return avlnode.key
+	return avlnode
 
 def update_bf(avlnode):
 	if avlnode !=None:
-		if avlnode.leftnode == avlnode.rightnode:
+		if avlnode.leftnode == None and avlnode.rightnode == None:
 			avlnode.bf = 0
 		else:
 			avlnode.bf = haltura(avlnode.leftnode) - haltura(avlnode.rightnode)
-		if avlnode.bf > 1 :
-			newRoot = rotateRight(avlnode)
-			recalculate_fb(newRoot)
-		elif avlnode.bf < -1:
-			newRoot = rotateLeft(avlnode)
-			recalculate_fb(newRoot)
-		return update_bf(avlnode.parent)
+			if avlnode.bf > 1 :
+				print("Entra R")
+				new_node=rotateRight(avlnode)
+				update_bf(new_node.rightnode)
+			elif avlnode.bf < -1:
+				print("Entra L")
+				new_node = rotateLeft(avlnode)
+				update_bf(new_node.leftnode)
+		update_bf(avlnode.parent)
+		
 #////////////////////////////////////////////////////////////////////////
 def delete(B,element):
 	key=search(B,element)
@@ -245,7 +210,7 @@ def delete(B,element):
 def deleteKey(B,key):
 	if access(B,key)!=None:
 		avlnode=Node_Raiz(B,key)
-		balance_factor(avlnode.parent)
+		update_bf(avlnode.parent)
 		return avlnode.key
 	return None
 '------------------------------------------------------------'
@@ -267,6 +232,7 @@ def Node_Hoja(Node,key):
 	if Rama.rightnode!=None:
 		if Rama.rightnode.key==key:
 			Rama.rightnode=Node.rightnode
+	Rama.height = max(Rama.leftnode.height,Rama.rightnode.height)
 	return Node
 	
 def Node_Interno(Current,key):
@@ -279,11 +245,13 @@ def Node_Interno(Current,key):
 			elif Rama.leftnode!=None:
 				Current=Current.leftnode
 				while Current.rightnode!=None:
-					Current=Current.rightnode					
+					Current=Current.rightnode
+					Current.count -= 1					
 			elif Rama.rightnode!=None:
 				Current=Current.rightnode
 				while Current.leftnode!=None:
 					Current=Current.leftnode
+					Current.count -= 1
 			elif Current.rightnode!=None or Current.leftnode!=None:
 				return Node_Interno(Current,Current.key)
 			Hoja=Node_Hoja(Current,Current.key)
@@ -297,7 +265,11 @@ def Node_Interno(Current,key):
 				Rama=Hoja
 			#--------------------					
 		elif key<Current.key:
-			return Node_Interno(Current.leftnode,key)
+			Current.count -= 1
+			Node = Node_Interno(Current.leftnode,key)
+			Current.height = max(Current.leftnode.height,Current.rightnode.height)
 		elif Current.key<key:
-			return Node_Interno(Current.rightnode,key)
+			Current.count -= 1
+			Node = Node_Interno(Current.rightnode,key)
+			Current.height = max(Current.leftnode.height,Current.rightnode.height)
 	return Node
