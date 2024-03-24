@@ -1,12 +1,28 @@
 from avltree import *
+from collections import deque
+def print_tree_by_level(root):
+    if root is None:
+        return
+    queue = deque()
+    queue.append(root)
+    while queue:
+        node = queue.popleft()
+        print(node.value, "-bf:", node.bf, "-h:", node.height, "-cnt:", node.count, ",")
+        if node.leftnode:
+            queue.append(node.leftnode)
+        if node.rightnode:
+            queue.append(node.rightnode)
 
-def print_tree_by_level(node):
-    if node != None:
-        print(node.value,"-bf:",node.bf,"-h:",node.height,"-cnt:",node.count,",")
-        print_tree_by_level(node.leftnode)
-        print_tree_by_level(node.rightnode)
-
-print("arboles binarios de busqueda")
+print("AVL arboles binarios de busqueda")
+print("Doble Rotate-----------------------------------------------------------")
+Tree=AVLTree()
+insert(Tree,"A",0)
+print(print_tree_by_level(Tree.root))
+insert(Tree,"C",2)
+print(print_tree_by_level(Tree.root))
+insert(Tree,"B",1)
+print(print_tree_by_level(Tree.root))
+print("AVL B-----------------------------------------------------------")
 B=AVLTree()
 print("Arbol B")
 insert(B,"E",5)
@@ -23,16 +39,6 @@ insert(B,"G",7)
 print(print_tree_by_level(B.root))
 insert(B,"F",6)
 print(print_tree_by_level(B.root))
-print("AVL calculateBAlance-----------------------------------------------------------")
-calculateBalance(B)
+print("AVL delete A-----------------------------------------------------------")
+deleteKey(B,1)
 print(print_tree_by_level(B.root))
-print("AVL delete F")
-deleteKey(B,6)
-print(print_tree_by_level(B.root))
-###############################
-Tree=AVLTree()
-insert(Tree,"A",0),insert(Tree,"C",2),insert(Tree,"B",1)
-print(print_tree_by_level(Tree.root))
-recalculate_fb(Tree)
-reBalance(Tree)
-print(print_tree_by_level(Tree.root))
