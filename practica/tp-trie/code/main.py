@@ -11,5 +11,5 @@ insert(T,"juan")
 print(search(T,"juan"))
 insert(T,"rafa")
 print(search(T,"rafa"))
-
+print("Trie-------------------------")
 print_words(T)

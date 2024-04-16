@@ -6,37 +6,48 @@ class TrieNode:
     children = None   
     key = None
     isEndOfWord = False
-
+####################################################################################
 def insert(T, string):
     if T.root is None:
         newNode = TrieNode()
         newNode.key = string[0]
         newNode.children = [None, None]
         if len(string) == 1:
-            newNode[0].isEndOfWord = True
+            newNode.isEndOfWord = True
         T.root = newNode
+        print("Insert Root",string[0])
         string = string[1:] 
-    add(T.root.children, string)
+    add(T.root.children,T.root,string)
 
-def add(current, string):
+def add(current,padre,string):
     if len(string) == 0:
         return
-    i = 0 if not current[0] else 1  # Intenta colocar en la primera posición disponible
-    if current[i] is None:
-        newNode = TrieNode()
-        newNode.parent=current
-        newNode.key = string[0]
-        newNode.children = [None, None]
-        current[i] = newNode
-    else:
-        # Si el nodo ya existe con la misma clave, sigue adelante
-        if current[i].key != string[0]:
-            return  # Conflictos en claves deberían manejarse mejor
-    if len(string) == 1:
-        current[i].isEndOfWord = True
-    else:
-        add(current[i].children, string[1:])
+    elif current[0] is not None:
+        print("Hijo",current[0].key)
+        if current[0].key == string[0]:
+            if len(string) == 1:
+                current[0].isEndOfWord = True
+            add(current[0].children,current[0],string[1:])
+    elif current[1] is not None :
+        print("Hermano",current[1].key)
+        if current[1].key == string[0]:
+            if len(string) == 1:
+                current[1].isEndOfWord = True
 
+            add(current[1].children,padre,string[1:])
+        else:
+            add(current[1].children[1].children,padre,string)
+
+    print("char",string[0])
+    newNode = TrieNode()
+    newNode.parent=padre
+    newNode.key = string[0]
+    newNode.children = [None, None]
+    current[0] = newNode
+    if len(string) == 1:
+        current[0].isEndOfWord = True
+    add(current[0].children,current[0],string[1:])
+####################################################################################
 def search(T,string):
     if T.root != None:
         find(T.root,string)
@@ -44,15 +55,16 @@ def search(T,string):
 
 def find(current,string):
     if current!=None:
-        if current.isEndOfWord:
+        if len(string) == 1:
+            print("Buscar",current.key,current.isEndOfWord)
             return current.isEndOfWord
-
         if current.key == string[0]:
-            find(current.children[0],string[1:])
+            print("Buscar",current.key)
+            return find(current.children[0],string[1:])
         else:
-            find(current.children[1],string[1:])
+            return find(current.children[1],string[1:])
     return False
-
+####################################################################################
 def delete(T,element):    
     return False
 
