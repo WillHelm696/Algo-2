@@ -1,18 +1,18 @@
 
+class dictionary:
+    head=None
+
 class dictionarynode:
     value=None
     key:None
     nextNode=None
-
-class dictionary:
-    head=None
-
+######################################################################################
 """ Descripción: Inserta un key en una posición determinada por la función de hash (1) en el diccionario (dictionary). Resolver colisiones por
     encadenamiento. En caso de keys duplicados se anexan a la lista.
     Entrada: el diccionario sobre el cual se quiere realizar la inserción
     y el valor del key a insertar
     Salida: Devuelve D
-""""
+"""
 def h(k,m):
     return (k % m)
 
@@ -25,15 +25,16 @@ def add_hash(current,node):
 def insert(D,key, value):
     m=len(D.head) # El diccionario sera una lista array y el encadenamiento sera de tipo linkedLit
     if m > 0 :
-        node=dictionary
+        node=dictionarynode()
         node.value=value
         node.key=key
-        idx=h(k,m)
-        if D.head[idx] is None 
+        idx=h(key,m)
+        if D.head[idx] is None:
             D.head[idx]=node
-        else:
+        elif D.head[idx] is not None:
             add_hash(D.head[idx],node)
     return D
+######################################################################################
 """ Descripción: Busca un key en el diccionario
     Entrada: El diccionario sobre el cual se quiere realizar la búsqueda
     (dictionary) y el valor del key a buscar.
@@ -43,17 +44,18 @@ def insert(D,key, value):
 def google(current,key):
     if current!=None:
         if current.key == key:
-            return current[idx].value
+            return current.value
         else:
-            return (current.nextNode,key)
+            return google(current.nextNode,key)
     return None
 
-def search(D,key):    
+def search(D,key):
     m=len(D.head)
     if m > 0 :
-        idx=h(k,m)
+        idx=h(key,m)
         return google(D.head[idx],key)
     return None
+######################################################################################
 """ Descripción: Elimina un key en la posición determinada por la función de hash (1) del diccionario (dictionary)
     Poscondición: Se debe marcar como nulo el key a eliminar.
     Entrada: El diccionario sobre el se quiere realizar la eliminación y
@@ -71,8 +73,26 @@ def delete_key(current,key):
 def delete(D,key):
     m=len(D.head)
     if m > 0 :
-        idx=h(k,m)
-        if D.hed[idx].key=key:
+        idx = h(key,m)
+        if D.head[idx].key == key:
             D.head[idx]= D.head[idx].nextNode
-        return delete_key(D.head[idx],key)
-    return None
+            return D
+        else:
+            delete_key(D.head[idx],key)
+    return D
+######################################################################################
+def print_dictionary(D):
+    if D is None or D.head is None:
+        print("El diccionario está vacío.")
+        return
+    
+    for idx, bucket in enumerate(D.head):
+        if bucket is not None:
+            print(f"Posición {idx}:",end='')
+            current = bucket
+            while current is not None:
+                print(f"<Key: {current.key}, Value: {current.value}> ",end='')
+                current = current.nextNode
+            print("")
+        else:
+            print(f"Posición {idx}: Vacía")

@@ -12,7 +12,7 @@ def insert(T, string):
         newNode = TrieNode()
         #print("Insertado",string[0])
         newNode.key = string[0]
-        newNode.children = [None, None]
+        newNode.children = [None,None]
         T.root = newNode
         if len(string) == 1:
             T.root.isEndOfWord = True
@@ -33,7 +33,7 @@ def add_trie(current,string):
                 newNode.parent=current
                 #print("Insertado como Hijo",string[0])
                 newNode.key = string[0]
-                newNode.children = [None, None]
+                newNode.children = [None,None]
                 current.children[0] = newNode
                 if len(string) == 1:
                     newNode.isEndOfWord = True
@@ -46,7 +46,7 @@ def add_trie(current,string):
             newNode.parent=current
             #print("Insertado como hermano",string[0])
             newNode.key = string[0]
-            newNode.children = [None, None]
+            newNode.children = [None,None]
             current.children[1] = newNode
             if len(string) == 1:
                 newNode.isEndOfWord = True
@@ -76,27 +76,28 @@ def search(T,string):
     return False
 ####################################################################################
 def delete_node(current):
+    print(current.key)
     if current!=None:
         if current.isEndOfWord == False :
             if current.children[1] is None:
-                print (current.children[0].key)
                 current.children[0]=None
             else:
                 if current.key == current.parent.children[0].key:
-                    print (current.key,"es padre de",current.children[0].key)
                     current.children[0] = None
-                elif current.key == current.parent.children[1].key:
-                    print (current.key,"es Hermano de",current.children[1].key)
-                    current.children[1]=None
-                return
+                    return
         if current.parent is not None:
+            print(current.key)
+            if current.parent.children[1] is not None:
+                if current.key == current.parent.children[1].key:
+                    current=current.parent
+                    current.children[1]=None
+                    return
             return delete_node(current.parent)
 
 def delete_word(current,element):
     if current is None and len(element) > 0:
         return False
     elif current.key == element[0] and len(element) == 1:
-        print ("Comienso",current.key)
         delete_node(current.parent)
         return True
     if current.key == element[0]:
@@ -108,8 +109,11 @@ def delete(T,element):
     Flag=False
     if T.root != None and len(element)>0:
         Flag = delete_word(T.root,element)
-        if T.root.children==[None,None] is None and T.root.key == element[0]:
-            T.root=None 
+        if T.root.key == element[0] and Flag==True:
+            if T.root.children==[None,None] is None:
+                T.root=None 
+            elif T.root.children[0] is None and T.root.children[1] is not None :
+                T.root=T.root.children[1]
     return Flag
 ####################################################################################
 def collect_words(node, prefix, words):
