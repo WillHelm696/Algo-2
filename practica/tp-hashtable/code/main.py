@@ -26,23 +26,25 @@ print_dictionary(D)
 def permutation(list1,list2):
     if len(list1) != len(list2):
         return False
-    frecuencia = {}
+    list1=list1.lower()
+    list2=list2.lower()
+    T=dictionary()
+    T.head=[None]*len(list1)
     for char in list1:
-        if char in frecuencia:
-            frecuencia[char]+=1
-        else:
-            frecuencia[char]=1
+        insert(T,ord(char),char)
 
     for char in list2:
-        if char in frecuencia:
-            frecuencia[char]-=1
-        else:
-            return False
-    for count in frecuencia:
-        if count !=0:
+        delete(T,ord(char))
+    for count in T.head:
+        if count is not None:
             return False
     return True
+# Complejidad O(n): toma O(n) en recorer la lista para isertar en la tabla hash la lista1 y O(n) en recorer la lista2 y eliminarla de la tabla hash   
 print("-------------------------------------------------------------------------------------")
+A="cambiadas"
+B="bicamadas"
+print(A," y ",B," son permutaciones")
+print(permutation(A,B))
 
 ######################################################################################
 """ Ejercicio 5
@@ -62,7 +64,8 @@ def list_unico(list):
                 return False
         return True
     return False
-L=[1,5,12,3,2]
+print("-------------------------------------------------------------------------------------")
+L=[1,5,12,1,2]
 print(L," es unico",list_unico(L))
 ######################################################################################
 """ Ejercicio 6
@@ -81,5 +84,29 @@ def cod_postal(list):
     método debería devolver la cadena original. Puedes asumir que la cadena sólo tiene letras
     mayúsculas y minúsculas (a - z, A - Z). Justificar el coste en tiempo de la solución propuesta.
 """
+def list_cont(current):
+    cont=1
+    while current.nextNode != None:
+        cont+=1
+        current=current.nextNode
+    return cont
+
 def list_comprimida(list):
-    return
+    if len(list)>0:
+        C=dictionary()
+        C.head=[None]*24
+        for char in list:
+            insert(C,ord(char),char)
+        new_list=""
+        for current in C.head:
+            if current is not None:
+                n=list_cont(current)
+                new_list += current.key
+                if n > 1:
+                    new_list += n
+        return new_list
+    return list
+print("-------------------------------------------------------------------------------------")
+Cadena="aabcccccaaa"
+print(Cadena)
+print("Comprimido:",list_comprimida(Cadena))

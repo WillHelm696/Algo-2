@@ -74,11 +74,12 @@ def delete(D,key):
     m=len(D.head)
     if m > 0 :
         idx = h(key,m)
-        if D.head[idx].key == key:
-            D.head[idx]= D.head[idx].nextNode
-            return D
-        else:
-            delete_key(D.head[idx],key)
+        if D.head[idx] is not None:
+            if D.head[idx].key == key:
+                D.head[idx]= D.head[idx].nextNode
+                return D
+            else:
+                delete_key(D.head[idx],key)
     return D
 ######################################################################################
 def print_dictionary(D):
