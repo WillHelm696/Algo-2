@@ -129,10 +129,10 @@ def completar(current,element,words):
         else:
             print(current.key,current.isEndOfWord,current.children)
 
-            if current.isEndOfWord != False and current.children == [None,None]: 
-                new_words = words + current.key if current.key else words
-                print(words)
-                return words
+            if current.isEndOfWord != False:
+                if current.children[0] is None and current.children[1] is None:
+                    new_words = words + current.key
+                    return new_words
             else:
                 new_words = words + current.key if current.key else words
                 if current.children[0] is not None or current.children[1] is not None:
@@ -141,8 +141,6 @@ def completar(current,element,words):
                         return completar(current.children[0],element,new_words)
                     elif current.children[0] is None and current.children[1] is not None:
                         return completar(current.children[1],element,new_words)
-                
-            return "-"
     return words
 
 def autoCompletar(T,cadena):
@@ -152,5 +150,5 @@ def autoCompletar(T,cadena):
 
 print("Ejercio_7-------------------------")
 
-A=autoCompletar(T,"jav")
-print("jav:",A)
+A=autoCompletar(T,"r")
+print(":",A)

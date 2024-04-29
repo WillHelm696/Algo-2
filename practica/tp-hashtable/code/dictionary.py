@@ -85,8 +85,7 @@ def delete(D,key):
 def print_dictionary(D):
     if D is None or D.head is None:
         print("El diccionario está vacío.")
-        return
-    
+        return    
     for idx, bucket in enumerate(D.head):
         if bucket is not None:
             print(f"Posición {idx}:",end='')

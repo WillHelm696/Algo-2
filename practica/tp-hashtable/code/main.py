@@ -101,9 +101,9 @@ def list_comprimida(list):
         for current in C.head:
             if current is not None:
                 n=list_cont(current)
-                new_list += current.key
+                new_list += current.value
                 if n > 1:
-                    new_list += n
+                    new_list += str(n)
         return new_list
     return list
 print("-------------------------------------------------------------------------------------")
