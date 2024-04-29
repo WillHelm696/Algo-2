@@ -16,7 +16,9 @@ print(search(D,20))
 print(search(D,10))
 print("-------------------------------------------------------------------------------------")
 delete(D,19)
+print("elimina 19")
 delete(D,15)
+print("elimina 15",)
 print_dictionary(D)
 """ Ejercicio 4
     Implemente un algoritmo lo más eficiente posible que devuelva True o False a la siguiente
@@ -32,7 +34,6 @@ def permutation(list1,list2):
     T.head=[None]*len(list1)
     for char in list1:
         insert(T,ord(char),char)
-
     for char in list2:
         delete(T,ord(char))
     for count in T.head:
@@ -41,8 +42,8 @@ def permutation(list1,list2):
     return True
 # Complejidad O(n): toma O(n) en recorer la lista para isertar en la tabla hash la lista1 y O(n) en recorer la lista2 y eliminarla de la tabla hash   
 print("-------------------------------------------------------------------------------------")
-A="cambiadas"
-B="bicamadas"
+A="1231234"
+B="3213224"
 print(A," y ",B," son permutaciones")
 print(permutation(A,B))
 

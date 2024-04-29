@@ -5,6 +5,7 @@ class dictionary:
 class dictionarynode:
     value=None
     key:None
+    cont=0
     nextNode=None
 ######################################################################################
 """ Descripción: Inserta un key en una posición determinada por la función de hash (1) en el diccionario (dictionary). Resolver colisiones por
@@ -20,7 +21,11 @@ def add_hash(current,node):
     if current.nextNode is None:
         current.nextNode=node
     else:
-        add_hash(current.nextNode,node)
+        if current.key != node.key and current.value != node.value:
+            add_hash(current.nextNode,node)
+        else: #----#
+            current.cont =current.cont + 1 #----#
+
 
 def insert(D,key, value):
     m=len(D.head) # El diccionario sera una lista array y el encadenamiento sera de tipo linkedLit
@@ -32,7 +37,8 @@ def insert(D,key, value):
         if D.head[idx] is None:
             D.head[idx]=node
         elif D.head[idx] is not None:
-            add_hash(D.head[idx],node)
+            if D.head[idx].key != key and D.head[idx].value != value:
+                add_hash(D.head[idx],node)
     return D
 ######################################################################################
 """ Descripción: Busca un key en el diccionario
@@ -65,10 +71,12 @@ def search(D,key):
 def delete_key(current,key):
     if current.nextNode != None:
         if current.nextNode.key==key:
+            if current.cont > 0:#----#
+                current.cont = current.cont - 1#----#
+                return #----#
             current.nextNode=current.nextNode.nextNode
         else:
-            delete_key(current.nextNode,key)
-    return None
+            return delete_key(current.nextNode,key)
 
 def delete(D,key):
     m=len(D.head)
