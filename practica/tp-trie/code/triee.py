@@ -76,29 +76,37 @@ def search(T,string):
     return False
 ####################################################################################
 def delete_node(current):
-    print(current.key)
     if current!=None:
+        #print(current.key)
         if current.isEndOfWord == False :
             if current.children[1] is None:
+                #print("elimina",current.children[0].key)
                 current.children[0]=None
-            else:
-                if current.key == current.parent.children[0].key:
-                    current.children[0] = None
-                    return
         if current.parent is not None:
-            print(current.key)
-            if current.parent.children[1] is not None:
+            if current.parent.children[1] is not None and current.parent.children[0] is not None:
                 if current.key == current.parent.children[1].key:
                     current=current.parent
+                    #print("elimina 1 de ",current.key)
                     current.children[1]=None
                     return
+                    
+                if current.key == current.parent.children[0].key:
+                    current=current.parent
+                    if current.parent is not None:
+                        aux=current.parent
+                        if current.key == aux.children[0].key:
+                            aux.children[0]=current.children[1]
+                        elif current.key == aux.children[1].key:
+                            aux.children[1]=current.children[1]
+                    return
+            #print("SUBE")
             return delete_node(current.parent)
 
 def delete_word(current,element):
     if current is None and len(element) > 0:
         return False
     elif current.key == element[0] and len(element) == 1:
-        delete_node(current.parent)
+        delete_node(current)
         return True
     if current.key == element[0]:
         return delete_word(current.children[0],element[1:])

@@ -78,7 +78,7 @@ print("Trie 0:",all_words)
 all_words =get_all_words(T1)
 print("Trie 1:",all_words)
 A=compare_tries(T1,T)
-print(A)
+print("Pertenecen al mismo ",A)
 ####################################################################################
 """ Ejercicio 6
     Implemente un algoritmo que dado el Trie T devuelva True si existen en el documento T dos cadenas invertidas. Dos cadenas son 
@@ -105,7 +105,7 @@ print("Ejercio_6-------------------------")
 insert(T1,"afar")
 all_words = get_all_words(T1)
 print("Trie 1:",all_words)
-print(is_inverted_pair(T1))
+print("Hay palindromos",is_inverted_pair(T1))
 
 """ Ejercicio 7
     Un corrector ortográfico interactivo utiliza un Trie para representar las palabras de su diccionario. Queremos añadir una 
@@ -121,34 +121,36 @@ def completar(current,element,words):
     if current is not None:
         if len(element) > 0:
             if current.key==element[0]:
-                print("0",current.key)
+                #print("0",current.key)
                 return completar(current.children[0],element[1:],words)
             else:
-                print("1",current.key)
+                #print("1",current.key)
                 return completar(current.children[1],element,words)
-        else:
-            print(current.key,current.isEndOfWord,current.children)
 
+        else:
+            #print("estoy en ",current.key)
             if current.isEndOfWord != False:
                 if current.children[0] is None and current.children[1] is None:
                     new_words = words + current.key
                     return new_words
+                return
             else:
                 new_words = words + current.key if current.key else words
-                if current.children[0] is not None or current.children[1] is not None:
-                    print(new_words)
-                    if current.children[0] is not None and current.children[1] is None:
-                        return completar(current.children[0],element,new_words)
-                    elif current.children[0] is None and current.children[1] is not None:
-                        return completar(current.children[1],element,new_words)
+                #print(new_words)
+                if current.children[0] is not None and current.children[1] is None:
+                    #print("entra 0")
+                    return completar(current.children[0],element,new_words)
+                elif current.children[0] is None and current.children[1] is not None:
+                    #print("entra 1")
+                    return completar(current.children[1],element,new_words)
     return words
 
 def autoCompletar(T,cadena):
     if T.root!= None:
-        return completar(T.root,cadena,"-")
-    return "-"
+        return completar(T.root,cadena,"")
+    return ""
 
 print("Ejercio_7-------------------------")
 
-A=autoCompletar(T,"r")
-print(":",A)
+A=autoCompletar(T,"ju")
+print("ju:",A)
