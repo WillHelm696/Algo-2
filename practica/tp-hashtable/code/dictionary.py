@@ -6,6 +6,7 @@ class dictionarynode:
     value=None
     key=None
     nextNode=None
+    count=1
 ######################################################################################
 """ Descripción: Inserta un key en una posición determinada por la función de hash (1) en el diccionario (dictionary). Resolver colisiones por
     encadenamiento. En caso de keys duplicados se anexan a la lista.
@@ -17,7 +18,10 @@ def h(k,m):
     return (k % m)
 
 def add_hash(current,node):
-    if current.nextNode is None:
+    if current.key == node.key and current.value == node.value:
+        current.count += 1
+        
+    elif current.nextNode is None:
         current.nextNode=node
     else:
         if current.key != node.key and current.value != node.value:
@@ -35,6 +39,9 @@ def insert(D,key, value):
         elif D.head[idx] is not None:
             if D.head[idx].key != key and D.head[idx].value != value:
                 add_hash(D.head[idx],node)
+            else:
+                D.head[idx].count += 1
+                print(print(D.head[idx].value,D.head[idx].count))
     return D
 ######################################################################################
 """ Descripción: Busca un key en el diccionario

@@ -26,24 +26,25 @@ print_dictionary(D)
     proposición: dado dos strings s1...sk y p1...pk, se quiere encontrar si los caracteres de p1...pk
     corresponden a una permutación de s1...sk. Justificar el coste en tiempo de la solución propuesta.
 """
-def insert_hash(current,node):
-    if current.nextNode is None:
-        current.nextNode=node
+def update_count(current, key, value):
+    if current is None:
+        return
+    if current.key == key and current.value == value:
+        if current.count > 1:
+            current.count -= 1
     else:
-        add_hash(current.nextNode,node)
+        update_count(current.nextNode, key, value)
+    print(current.value,current.count)
+    return current.count
 
-def table_hash(D,key, value):
-    m=len(D.head) # El diccionario sera una lista array y el encadenamiento sera de tipo linkedLit
-    if m > 0 :
-        node=dictionarynode()
-        node.value=value
-        node.key=key
-        idx=h(key,m)
-        if D.head[idx] is None:
-            D.head[idx]=node
-        elif D.head[idx] is not None:
-            add_hash(D.head[idx],node)
-    return D
+def delete_count(T,key,char):
+    m=len(T.head)
+    idx=h(key,m)
+    if T.head[idx] is None:
+        return None
+    else:
+        if update_count(T.head[idx],key,char) <= 1:
+            delete(T,key)
 
 def permutation(list1,list2):
     if len(list1) != len(list2):
@@ -53,16 +54,18 @@ def permutation(list1,list2):
     T=dictionary()
     T.head=[None]*len(list1)
     for char in list1:
-        table_hash(T,ord(char),char)
+        insert(T,ord(char),char)
+    print_dictionary(T)
     for char in list2:
-        delete(T,ord(char))
+        delete_count(T,ord(char),char)
+    print_dictionary(T)
     for node in T.head:
         if node is not None:
             return False
     return True
 # Complejidad O(n): toma O(n) en recorer la lista para isertar en la tabla hash la lista1 y O(n) en recorer la lista2 y eliminarla de la tabla hash   
 print("-------------------------------------------------------------------------------------")
-A="1231234"
+A="1231224"
 B="3213214"
 print(A," y ",B," son permutaciones")
 print(permutation(A,B))
@@ -102,38 +105,58 @@ def cod_postal(list):
     método debería devolver la cadena original. Puedes asumir que la cadena sólo tiene letras
     mayúsculas y minúsculas (a - z, A - Z). Justificar el coste en tiempo de la solución propuesta.
 """
-def list_cont(current):
-    cont=1
-    while current.nextNode != None:
-        cont+=1
-        current=current.nextNode
-    return cont
-
-def list_comprimida(list):
-    if len(list)>0:
-        C=dictionary()
-        C.head=[None]*24
-        for char in list:
-            table_hash(C,ord(char),char)
-        new_list=""
-        for current in C.head:
-            if current is not None:
-                n=list_cont(current)
-                new_list += current.value
-                if n > 1:
-                    new_list += str(n)
-        return new_list
-    return list
+def compres_string(list):
+    if len(list)>1:
+        comprimido=[]
+        cont=1
+        for n in range(1,len(list)):
+            if list[n] == list[n-1]:
+                cont +=1
+            else:
+                comprimido.append(list[n-1]+str(cont))
+                cont=1
+    comprimido.append(list[n-1]+str(cont))
+    comprimido=''.join(comprimido)
+    if len(list)<=len(comprimido):
+        return list
+    return comprimido
+#Coste del Tiempo es O(n) 
 print("-------------------------------------------------------------------------------------")
-Cadena="aabcccccaaa"
-print(Cadena)
-print("Comprimido:",list_comprimida(Cadena))
+cadena="aabcccccaaa"
+print(cadena)
+print("Comprimido:",compres_string(cadena))
 ######################################################################################
 """ Ejercicio 8
     Se requiere encontrar la primera ocurrencia de un string p1...pk en uno más largo a1...aL. Implementar 
     esta estrategia de la forma más eficiente posible con un costo computacional menor a O(K*L) (solución 
     por fuerza bruta). Justificar el coste en tiempo de la solución propuesta. 
 """
+def Karp_key(s,primo):
+    key=0
+    for n in range (0,len(s)):
+        key += ord(s[n])*(primo**n)
+    return key
+
+def Rabin_Karp(p,a):
+    k=len(p)
+    l=len(a)
+    primo=3
+    if k>l:
+        cadena=p[:l]
+        key = Karp_key(cadena,primo)
+        key_a = Karp_key(a,primo)
+        for n in range(l,k):
+            key = (key-ord(cadena[0]))/primo + ord(p[n])*(primo**(l-1))
+            cadena = cadena[1:]+p[n]
+            if key_a == key and a == cadena:
+                return n-l+1
+    return -1
+# COmplejudad temporal O(K+L)
+print("-------------------------------------------------------------------------------------")
+p='abracadabra'
+a='cada'
+print(a," es ocurencia de ",p,"en:")
+print(Rabin_Karp(p,a))
 ######################################################################################
 """
 Ejercicio 9 
@@ -141,4 +164,18 @@ Considerar los conjuntos de enteros S = {s1, . . . , sn} y T = {t1, . . . , tm}.
 Implemente un algoritmo que utilice una tabla de hash para determinar si S ⊆ T (S subconjunto de T). 
 ¿Cuál es la complejidad temporal del caso promedio del algoritmo propuesto? 
 """
+def is_subset(S,T):
+    Q=dictionary()
+    Q.head=[None]*len(S)
+    for element in S:
+        insert(Q,element,element)
+    for m in T:
+        if search(Q,m) is None:
+            return False
+    return True
+#Complejidad Temporal O(S+T)
+print("-------------------------------------------------------------------------------------")
+T={3,1,5,2,4}
+S={1,2,3}
+print(S,"Es subconjunto de ",T,is_subset(T,S))
 ######################################################################################
