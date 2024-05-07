@@ -30,11 +30,9 @@ def update_count(current, key, value):
     if current is None:
         return
     if current.key == key and current.value == value:
-        if current.count > 1:
-            current.count -= 1
+        current.count -= 1
     else:
         update_count(current.nextNode, key, value)
-    print(current.value,current.count)
     return current.count
 
 def delete_count(T,key,char):
@@ -43,7 +41,7 @@ def delete_count(T,key,char):
     if T.head[idx] is None:
         return None
     else:
-        if update_count(T.head[idx],key,char) <= 1:
+        if update_count(T.head[idx],key,char) == 0:
             delete(T,key)
 
 def permutation(list1,list2):
@@ -55,17 +53,15 @@ def permutation(list1,list2):
     T.head=[None]*len(list1)
     for char in list1:
         insert(T,ord(char),char)
-    print_dictionary(T)
     for char in list2:
         delete_count(T,ord(char),char)
-    print_dictionary(T)
     for node in T.head:
         if node is not None:
             return False
     return True
 # Complejidad O(n): toma O(n) en recorer la lista para isertar en la tabla hash la lista1 y O(n) en recorer la lista2 y eliminarla de la tabla hash   
 print("-------------------------------------------------------------------------------------")
-A="1231224"
+A="1231234"
 B="3213214"
 print(A," y ",B," son permutaciones")
 print(permutation(A,B))
@@ -94,9 +90,13 @@ print(L," es unico",list_unico(L))
     representa a la calle XXXX a la altura 1024 en la Ciudad de Mendoza. Encontrar e
     implementar una función de hash apropiada para los códigos postales argentinos.
 """
-def cod_postal(list):
-        
-        return
+def hash_codigo_postal(codigo_postal):
+    trio= codigo_postal[:3].upper()
+    key=0
+    for char in trio:
+        key += ord(char)
+    key *=1000
+    return key 
 ######################################################################################
 """ Ejercicio 7
     Implemente un algoritmo para realizar la compresión básica de cadenas utilizando el

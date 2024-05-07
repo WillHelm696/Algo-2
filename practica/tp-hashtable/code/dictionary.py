@@ -41,7 +41,6 @@ def insert(D,key, value):
                 add_hash(D.head[idx],node)
             else:
                 D.head[idx].count += 1
-                print(print(D.head[idx].value,D.head[idx].count))
     return D
 ######################################################################################
 """ Descripción: Busca un key en el diccionario
