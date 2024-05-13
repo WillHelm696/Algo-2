@@ -1,4 +1,5 @@
 from Linkedlist import *
+
 """ Ejercicio 1
     Implementar la función crear grafo que dada una lista de vértices y una lista de aristas cree un grafo
     con la representación por Lista de Adyacencia.
@@ -23,15 +24,14 @@ def createGraph(vertices,edges):
     for i in range(v):
         graph[i].insert(vertex.data)
         vertex = vertex.next
+
     edge = edges.head
-    if 0 < e and e <= (1/2)*v*(v-1):
-        while edge:
-            vertex=edge.data
-            add_list(graph,vertex[0],vertex[1])
-            add_list(graph,vertex[1],vertex[0])
-            edge = edge.next
-        return graph
-    return None
+    while edge:
+        vertex=edge.data
+        add_list(graph,vertex[0],vertex[1])
+        add_list(graph,vertex[1],vertex[0])
+        edge = edge.next
+    return graph
 """ Ejercicio 2
     Implementar la función que responde a la siguiente especificación.
     def existPath(Grafo, v1, v2):
@@ -42,16 +42,23 @@ def createGraph(vertices,edges):
     Salida: retorna True si existe camino entre v1 y v2, False en caso
     contrario.
 """
-def existPath(Grafo,v1,v2):
-    if v1 == v2:
-        return True
-    for i in (len(Grafo)):
-        current=Grafo[i].head
+def Path(Grafo,v1,v2,visitado):
+    for node in Grafo:
+        current=node.head
         if current.data == v1:
+            if v1 == v2:
+                return True
+            visitado.append(v1)
             while current.next:
                 current=current.next
-                existPath(Grafo,current.data,v2)
+                if not current.data in visitado:
+                    if Path(Grafo,current.data,v2,visitado):
+                        return True
     return False
+
+def existPath(Grafo,v1,v2):
+    return Path(Grafo,v1,v2,[])
+
 """ Ejercicio 3
     Implementar la función que responde a la siguiente especificación.
     def isConnected(Grafo):
@@ -60,23 +67,23 @@ def existPath(Grafo,v1,v2):
     Salida: retorna True si existe camino entre todo par de vértices,
     False en caso contrario.
 """
-#Continuar
-def Conencted(Grafo,list):
-    if len(list) == len (Grafo):
-        return True
-    for i in (len(Grafo)):
-        current=Grafo[i].head
-        if current.data in list:
+def Conencted(Grafo,visitados):
+    for node in Grafo:
+        current=node.head
+        if current.data == visitados[-1]:
             while current:
-                if current.data in list:
-                    current=current.next
-                else:
-                    list.apend(current.data)
-            return Conencted(Grafo,list)
+                if not current.data in visitados:
+                    visitados.append(current.data)
+                    Conencted(Grafo,visitados)
+                current = current.next
+    if len(visitados) == len(Grafo):
+        return True
     return False
 
 def isConnected(Grafo):
-    return Conencted(Grafo,[Grafo.head.data])
+    if len(Grafo) > 0:
+        return Conencted(Grafo,[Grafo[0].head.data])
+    return False
 
 """ Ejercicio 4
     Implementar la función que responde a la siguiente especificación.
@@ -97,7 +104,11 @@ def isTree(Grafo):
     vértices.
 """
 def isComplete(Grafo):
-    return
+    n=len(Grafo)
+    for nodo in Grafo:
+        if nodo.length() != n:
+            return False
+    return True
 """ Ejercicio 6
     Implementar una función que dado un grafo devuelva una lista de aristas que si se eliminan el grafo
     se convierte en un árbol. Respetar la siguiente especificación.
@@ -128,8 +139,22 @@ def countConnections(Grafo):
     Salida: Devuelve una Lista de Adyacencia con la representación BFS del
     grafo recibido usando v como raíz.
 """
-def convertToBFSTree(Grafo, v):
+def search_node(Grafo,v):
+    for nodo in Grafo:
+        current = nodo.head
+        if current.data == v:
+            return current
+    return None
+
+def convertToBFSTree(Grafo,v):
+    Tree=[LinkedList() for _ in range(len(Grafo))]
+    nodo=search_node(Grafo,v)
+    visitado = []
     
+    visitado.append(nodo.data)
+    while grafo:
+        current = queue.popleft()
+
     return
 """
     Implementar la función que responde a la siguiente especificación.
@@ -166,9 +191,9 @@ def bestRoad(Grafo, v1, v2):
 def isBipartite(Grafo):
     return
 
-def display_graph(self):
-    for i in range(len(self)):
-        current = self[i].head
+def display_graph(graph):
+    for nodo in graph:
+        current = nodo.head
         print(f"Vertice {current.data}: ",end='')
         current = current.next
         while current:

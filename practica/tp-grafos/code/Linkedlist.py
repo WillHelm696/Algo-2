@@ -1,6 +1,7 @@
 # Definir la clase Node
 class Node:
     def __init__(self, data):
+        self.parent = None
         self.data = data
         self.next = None
 
@@ -18,26 +19,39 @@ class LinkedList:
             while current.next:
                 current = current.next
             current.next = new_node
+            new_node.parent=current
 
-    def search(self, data):
+    def length(self):
+        count = 0
         current = self.head
         while current:
-            if current.data == data:
-                return True
+            count += 1
             current = current.next
-        return False
+        return count
+
+    def search(self, data):
+        pos = 0
+        current = self.head
+        while current:
+            pos += 1 
+            if current.data == data:
+                return pos
+            current = current.next
+        return None
 
     def delete(self, data):
+        pos = 0
         current = self.head
         if current is None:
-            return
+            return None
         if current.data == data:
             self.head = current.next
-            return
+            return pos
         while current.next:
+            pos =+ 1
             if current.next.data == data:
                 current.next = current.next.next
-                return
+                return pos
             current = current.next
 
     def update(self, old_data, new_data):
@@ -47,24 +61,6 @@ class LinkedList:
                 current.data = new_data
                 return
             current = current.next
-
-    def insert(self, data):
-        new_node = Node(data)
-        if self.head is None:
-            self.head = new_node
-        else:
-            current = self.head
-            while current.next:
-                current = current.next
-            current.next = new_node
-
-    def length(self):
-        count = 0
-        current = self.head
-        while current:
-            count += 1
-            current = current.next
-        return count
     
     def display(self):
         current = self.head
