@@ -17,7 +17,13 @@ class Queue:
     def dequeue(self):
         if self.head is not None:
             current = self.head
-            while current.next :
-                current
+            if current.next is None:
+                element=current.data
+                self.head=self.head.next
+            while current.next.next:
+                current=current.next
+                
+            element = current.next.data
             current.next = current.next.next
-        return None
+            return element
+        return None 

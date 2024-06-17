@@ -139,23 +139,14 @@ def countConnections(Grafo):
     Salida: Devuelve una Lista de Adyacencia con la representación BFS del
     grafo recibido usando v como raíz.
 """
-def search_node(Grafo,v):
-    for nodo in Grafo:
-        current = nodo.head
-        if current.data == v:
-            return current
-    return None
-
 def convertToBFSTree(Grafo,v):
     Tree=[LinkedList() for _ in range(len(Grafo))]
-    nodo=search_node(Grafo,v)
-    visitado = []
-    
-    visitado.append(nodo.data)
-    while grafo:
-        current = queue.popleft()
-
-    return
+    visitado = [False]*len(Grafo)
+    queue = deque([v])
+    visitado[v] = True
+    while queue:
+        
+    return Tree
 """
     Implementar la función que responde a la siguiente especificación.
     def convertToDFSTree(Grafo, v):
